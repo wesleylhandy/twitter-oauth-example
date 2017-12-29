@@ -98,7 +98,7 @@ require('./Nonce')().then(function(oauth_nonce) {
     const oauth_signature_method = 'HMAC-SHA1';
     const oauth_timestamp = parseInt(moment.now() / 1000);
     const oauth_version = '1.0';
-    const oauth_signature = require('./Signature')(oauth_url, oauth_method, [process.env.TWITTER_CONSUMER_SECRET], { oauth_callback: oauth_callback, oauth_consumer_key: oauth_consumer_key, oauth_nonce: oauth_nonce, oauth_signature_method: oauth_signature_method, oauth_timestamp: oauth_timestamp, oauth_version: oauth_version });
+    const oauth_signature = require('./Signature')(oauth_url, oauth_method, [process.env.TWITTER_CONSUMER_SECRET], { oauth_callback, oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_version });
 
     console.log({ oauth_signature: oauth_signature });
 
@@ -106,14 +106,14 @@ require('./Nonce')().then(function(oauth_nonce) {
         method: oauth_method,
         url: oauth_url,
         headers: {
-            Authorization: "OAuth oauth_nonce=\"" +
-                percentalizedURIComponent(oauth_nonce) + "\" oauth_callback=\"" +
-                percentalizedURIComponent(oauth_callback) + "\", oauth_signature_method=\"" +
+            Authorization: "OAuth oauth_callback=\"" +
+                percentalizedURIComponent(oauth_callback) + "\", oauth_consumer_key=\"" +
+                percentalizedURIComponent(oauth_consumer_key) + "\", oauth_nonce=\"" +
+                percentalizedURIComponent(oauth_nonce) + "\", oauth_signature_method=\"" +
                 percentalizedURIComponent(oauth_signature_method) + "\", oauth_timestamp=\"" +
-                percentalizedURIComponent(oauth_timestamp) + "\", oauth_consumer_key=\"" +
-                percentalizedURIComponent(oauth_consumer_key) + "\", oauth_signature=\"" +
-                oauth_signature + "\", oauth_version=\"" +
-                percentalizedURIComponent(oauth_version) + "\""
+                percentalizedURIComponent(oauth_timestamp) + "\", oauth_version=\"" +
+                percentalizedURIComponent(oauth_version) + "\", oauth_signature=\"" +
+                percentalizedURIComponent(oauth_signature) + "\""
         }
     }).then(function(response) {
         console.log({ tokenResponse: response })
