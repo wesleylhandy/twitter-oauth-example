@@ -1,0 +1,41 @@
+{
+  "name": "l0gg3r",
+  "version": "1.0.0",
+  "description": "Twitter Oauth",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "twitter",
+    "oauth",
+    "node",
+    "express"
+  ],
+  "author": "Wesley L. Handy",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "connect-mongo": "^2.0.0",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "jest": "^22.0.4",
+    "moment": "^2.20.1",
+    "mongoose": "^4.10.8",
+    "morgan": "^1.9.0",
+    "node-twitter-api": "^1.8.0",
+    "short-id": "0.1.0-1",
+    "shortid": "^2.2.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wesleylhandy/twitter-oauth-example.git"
+  }
+}
