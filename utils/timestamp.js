@@ -12,7 +12,7 @@ function timestamp() {
             console.log("Current time : ");
             console.log(moment(date).format('X'));
 
-            return resolve(moment(date).format("X"));
+            return resolve(parseInt(moment(date).format("X")));
         });
     })
 }
