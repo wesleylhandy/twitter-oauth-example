@@ -116,11 +116,11 @@ Promise.all([nonce, timestamp]).then(function(values) {
             Authorization: "OAuth oauth_callback=\"" +
                 percentalizedURIComponent(oauth_callback) + "\", oauth_consumer_key=\"" +
                 percentalizedURIComponent(oauth_consumer_key) + "\", oauth_nonce=\"" +
-                percentalizedURIComponent(oauth_nonce) + "\", oauth_signature_method=\"" +
+                percentalizedURIComponent(oauth_nonce) + "\", oauth_signature=\"" +
+                percentalizedURIComponent(oauth_signature) + "\", oauth_signature_method=\"" +
                 percentalizedURIComponent(oauth_signature_method) + "\", oauth_timestamp=\"" +
                 percentalizedURIComponent(oauth_timestamp) + "\", oauth_version=\"" +
-                percentalizedURIComponent(oauth_version) + "\", oauth_signature=\"" +
-                percentalizedURIComponent(oauth_signature) + "\"",
+                percentalizedURIComponent(oauth_version) + "\"",
             Host: 'api.twitter.com'
         }
     }).then(function(response) {
