@@ -69,7 +69,7 @@ if (process.env.NODE_ENV !== 'production') {
         console.log(req.session);
         console.log('');
         console.log('Logged In: ');
-        console.log('__________ ' + req.isAuthenticated());
+        console.log('__________ ' + req.user);
         console.log('**********************************************');
         console.log('');
         next();
@@ -80,25 +80,32 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(express.static(path.join(__dirname, 'client/public/index.html')));
 
-app.post('/auth/twitter/callback', function(req, res) {
+app.get('/auth/twitter/callback', function(req, res) {
     console.log({ twitterCallbackParams: req.params });
+    res.json(req.params)
 });
 
-require('./Nonce')().then(function(oauth_nonce) {
-    console.log({ oauth_nonce: oauth_nonce });
+app.get('*', function(req, res) {
+    res.json({ nope: 'not real data' });
+});
+
+const nonce = require('./utils/nonce')();
+const timestamp = require('./utils/timestamp')();
+
+Promise.all([nonce, timestamp]).then(function(values) {
 
     const axios = require('axios');
-    const moment = require('moment');
-    const percentalizedURIComponent = require('./percentalize');
+    const percentalizedURIComponent = require('./utils/percentalize');
 
     const oauth_url = 'https://api.twitter.com/oauth/request_token'
     const oauth_method = 'POST';
     const oauth_callback = process.env.TWITTER_CALLBACK;
     const oauth_consumer_key = process.env.TWITTER_CONSUMER_KEY;
+    const oauth_nonce = values[0];
     const oauth_signature_method = 'HMAC-SHA1';
-    const oauth_timestamp = parseInt(moment.now() / 1000);
+    const oauth_timestamp = values[1];
     const oauth_version = '1.0';
-    const oauth_signature = require('./Signature')(oauth_url, oauth_method, [process.env.TWITTER_CONSUMER_SECRET], { oauth_callback, oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_version });
+    const oauth_signature = require('./utils/signature')(oauth_url, oauth_method, [process.env.TWITTER_CONSUMER_SECRET], { oauth_callback, oauth_consumer_key, oauth_nonce, oauth_signature_method, oauth_timestamp, oauth_version });
 
     console.log({ oauth_signature: oauth_signature });
 
@@ -113,7 +120,8 @@ require('./Nonce')().then(function(oauth_nonce) {
                 percentalizedURIComponent(oauth_signature_method) + "\", oauth_timestamp=\"" +
                 percentalizedURIComponent(oauth_timestamp) + "\", oauth_version=\"" +
                 percentalizedURIComponent(oauth_version) + "\", oauth_signature=\"" +
-                percentalizedURIComponent(oauth_signature) + "\""
+                percentalizedURIComponent(oauth_signature) + "\"",
+            Host: 'api.twitter.com'
         }
     }).then(function(response) {
         console.log({ tokenResponse: response })
